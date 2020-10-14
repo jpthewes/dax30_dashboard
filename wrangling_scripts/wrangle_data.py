@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import pandas as pd
 import plotly.graph_objs as go
-import matplotlib.pyplot as plt
 import requests
 
 from time import sleep
