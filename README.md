@@ -65,7 +65,7 @@ In addition to this prediction feature, some key facts about the stocks are disp
 
 ## Conclusion:
 ### Reflection:
-While validating the model using the mentioned metrics RMSE and visualizations, it became apparent that the more days in the future I wanted to predict, the less accurate the predictions were. This seems plausible. But if you take a look at the [pictures](https://github.com/jpthewes/dax30_dashboard/tree/master/images/), it becomes visible that if you train a model for predicting e.g. 10 days into the future also the prediction of 1 day into the future gets worse. This is to be discussed in the [improvements section](#Instructions:).
+While validating the model using the mentioned metrics RMSE and visualizations, it became apparent that the more days in the future I wanted to predict, the less accurate the predictions were. This seems plausible. But if you take a look at the [pictures](https://github.com/jpthewes/dax30_dashboard/tree/master/pictures), it becomes visible that if you train a model for predicting e.g. 10 days into the future also the prediction of 1 day into the future gets worse. This is to be discussed in the [improvements section](#Instructions:).
 
 What also comes apparent when looking at the images is, that the predictions somehow are a little lower and behind the more predictions are performed. This could be related to the long term memory character of LSTM.
 
