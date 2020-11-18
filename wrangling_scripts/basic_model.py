@@ -16,12 +16,12 @@ import os
 script_dir = os.path.dirname(os.path.realpath(__file__))
 # Parameters:
 history_points = 50
-predicted_days = 11
+predicted_days = 1
 CSV_PATH = os.path.join(script_dir, 'csv_data/DAI.DEX_daily.csv')
 MODEL_PRE = os.path.join(script_dir, '../models/basic_model_')
 MODEL_PATH = f'{MODEL_PRE}{predicted_days}.h5'
-NUM_EPOCHS = 20
-CUTOFF_LAST_N_DAYS = 1
+NUM_EPOCHS = 100
+CUTOFF_LAST_N_DAYS = 300
 
 
 def shift(arr, num, fill_value=np.nan):
@@ -213,7 +213,7 @@ def build_model():
     lstm_input = Input(shape=(history_points, 5), name='lstm_input')
     x = LSTM(21, name='lstm_0')(lstm_input)
     #x = LSTM(50, name='lstm_1')(x)
-    x = Dropout(0.1, name='lstm_dropout_0')(x)
+    x = Dropout(0.05, name='lstm_dropout_0')(x)
     x = Dense(64, name='dense_0')(x)
     x = Activation('sigmoid', name='sigmoid_0')(x)
     output = Dense(predicted_days, name='dense_1_output', activation="linear")(x)
@@ -223,7 +223,7 @@ def build_model():
     adam = optimizers.Adam(lr=0.0005)
     model.compile(optimizer=adam, loss='mse')
     print(model.summary())
-    model.fit(x=ohlcv_train, y=y_train, batch_size=32, epochs=NUM_EPOCHS, shuffle=True, validation_split=0.1)
+    model.fit(x=ohlcv_train, y=y_train, batch_size=80, epochs=NUM_EPOCHS, shuffle=True, validation_split=0.1)
 
 
     # evaluation
