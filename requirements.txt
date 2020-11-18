@@ -18,3 +18,4 @@ sklearn==0.0
 tensorflow==1.14.0
 matplotlib==3.3.3
 h5py<3.0.0
+backports-datetime-fromisoformat==1.0.0
