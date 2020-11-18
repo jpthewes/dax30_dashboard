@@ -17,3 +17,4 @@ alpha_vantage==2.2.0
 sklearn==0.0
 tensorflow==1.14.0
 matplotlib==3.3.3
+h5py<3.0.0
