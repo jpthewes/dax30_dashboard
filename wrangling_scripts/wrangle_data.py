@@ -42,6 +42,7 @@ def get_daily_stock_data(symbol):
     if len(data.json().keys()) == 2:
         df = pd.DataFrame.from_dict(data.json()['Time Series (Daily)'], orient='index')
         print("Succes: ", symbol)
+        print(df[:LAST_N_DAYS_HISTORY+1])
         return df[:LAST_N_DAYS_HISTORY+1]
     else:
         print("Failed to fetch the following data: ", symbol, data.json()['Note'])
