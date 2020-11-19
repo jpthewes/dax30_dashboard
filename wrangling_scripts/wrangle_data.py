@@ -13,7 +13,7 @@ MonkeyPatch.patch_fromisoformat()
 
 from flask import render_template
 
-from .basic_model import load_model_predict, history_points, clean_and_normalise
+from .build_model import load_model_predict, history_points, clean_and_normalise
 
 #Parameters
 LAST_N_DAYS_HISTORY = 50

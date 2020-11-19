@@ -2,7 +2,7 @@ from dax30 import app
 import json, plotly
 from flask import render_template, request
 from wrangling_scripts.wrangle_data import return_figures, return_predicted_figure
-from wrangling_scripts.basic_model import predicted_days
+
 
 @app.errorhandler(RuntimeError)
 def handle_exception(e):

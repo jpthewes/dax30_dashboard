@@ -1,40 +1,50 @@
 # dax30_dashboard
 
-## Overview:
-This uses data from the stock market via the alphavantage API to create a stock market dashboard. 
-It currently only shows the 3 big german car manufacturers DAI, BMW, VW due to free API restrictions but is meant to have the whole DAX 30 companies. Moreover to just showing the historical data of the stocks, the project also includes a machine learning approach to predict the future stock prices based on the recent stock activity.
+## Project Definition:
+### Project Overview:
+This project uses data from the stock market via the alphavantage API to create a stock market dashboard. 
+It currently shows the 3 big german car manufacturers DAI, BMW, VW due to free API restrictions but is meant to have the whole DAX 30 companies. Moreover to just showing the historical data of the stocks, the project also includes a machine learning approach to predict the future stock prices based on the recent stock activity.
 This project was part of the Udacity Data Science Nanodegree.
 
-## Project Definition:
+### Problem Statement:
 Many individuals have been recently started stock trading for individual investement. A big issue for these people is to find valuable information for trading which helps them to assess the stocks and try to predict whether they will rise or fall in value. 
 This project aims to assist these individuals with a machine learning approach. **The goal of this project is clearly not to give buy or sell recommendations** but rather to test how well ML can make those predictions and provide more information to investors. 
-The accuracy of the predictions will be assessed using visual comparison of stock charts and RMSE (=root mean square error). Visual comparison is seen as valuable here because the development of the value over time can most easily be assessed by a human instead of comprimising this information into one number. On the other hand a numerical metric is necessary to give an overall idea while training and tuning the model. Therefore RMSE is used.
 
-## Data Analysis:
-The data which is used was fetched using the [Alphavantage API](https://www.alphavantage.co/). The training of the model was performed with data from 2005-01-03 until 2020-11-13. The data was explored using pandas and matplotlib in the development process. Continously the most recent data is vizualised at the [landing page](https://dax30-dashboard.herokuapp.com/) of the web app.
+### Metrics:
+The accuracy of the predictions will be assessed using visual comparison of stock charts and MSE (= mean square error). Visual comparison is seen as valuable here because the development of the value over time can most easily be assessed by a human instead of comprimising this information into one number. On the other hand a numerical metric is necessary to give an overall idea while training and tuning the model. Therefore MSE is used.
 
+## Data Analysis (Exploration/Visualization):
+The data which is used was fetched using the [Alphavantage API](https://www.alphavantage.co/). The training of the model was performed with data from 2005-01-03 until 2020-11-13. The data was explored using pandas and matplotlib in the development process. Fortunately the data which is pulled from the API is already clean and can be used directly. Continously the most recent data is vizualised at the [landing page](https://dax30-dashboard.herokuapp.com/) of the web app.
 
+## Methodology:
+### Data Preprocessing:
+The data is already fairly clean and only needs to be brought into the right format using pandas. This is performed in the function csv_to_dataset() in build_model.py.
 
-## Model Architecture:
+### Implementation/Refinement:
 I chose a model architecture which uses LSTM cells as a main part. Those LSTM(=Long Short Term Memory) cells have been shown to provide promising results when predicting time-based data, because LSTM as a kind of Recurrent Neural Network (RNN) use previous time events to be informed about later ones. Different than other RNNs, LSTM also uses long term dependencies for prediction. For more information please take a look [here](https://colah.github.io/posts/2015-08-Understanding-LSTMs/).
+#### Model Architecture:
 ```
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-lstm_input (InputLayer)      [(None, 50, 5)]           0         
+input_1 (InputLayer)         [(None, 50, 5)]           0         
 _________________________________________________________________
-lstm_0 (LSTM)                (None, 21)                2268      
+lstm (LSTM)                  (None, 50, 50)            11200     
 _________________________________________________________________
-lstm_dropout_0 (Dropout)     (None, 21)                0         
+dropout (Dropout)            (None, 50, 50)            0         
 _________________________________________________________________
-dense_0 (Dense)              (None, 64)                1408      
+lstm_1 (LSTM)                (None, 21)                6048      
 _________________________________________________________________
-sigmoid_0 (Activation)       (None, 64)                0         
+dropout_1 (Dropout)          (None, 21)                0         
 _________________________________________________________________
-dense_1_output (Dense)       (None, 11)                715       
+dense (Dense)                (None, 128)               2816      
+_________________________________________________________________
+dense_1 (Dense)              (None, 64)                8256      
+_________________________________________________________________
+dense_2 (Dense)              (None, 11)                715       
 =================================================================
-Total params: 4,391
-Trainable params: 4,391
+Total params: 29,035
+Trainable params: 29,035
 Non-trainable params: 0
 ```
 
@@ -56,12 +66,15 @@ Parameters which can be adjusted while building the model are:
 - NUM_EPOCHS: number of epochs to train the model
 - CUTOFF_LAST_N_DAYS: number of days to cut off at the end of the fetched data (will be explained later)
 
+Furthermore, in the process of training the models the parameters epoch_size and learning rate were tweaked and the model architecture was adjusted with the help of the above mentioned metrics.
 
 ## Results:
 The prediction of the next days of stock prices is now performed on a different model based on the number of days to predict. This is necessary, because the models need to have fixed output layers. Therefore one needs to select the number of days before seing the predictions: https://dax30-dashboard.herokuapp.com/predict_select. Based on this user input the corresponding model is chosen and predictions are performed into the future based on most recent data pulled from the API (e.g.: https://dax30-dashboard.herokuapp.com/predict?n_days=10). 
 Due to API limitations of 5 possible calls per minute a waiting [timer](https://github.com/jpthewes/dax30_dashboard/blob/master/dax30/templates/timer.html) has been introduced to inform about this limitation. This can be tested when refreshing the page 2 times in 1 minute.
 
 In addition to this prediction feature, some key facts about the stocks are displayed at the [landing page](https://dax30-dashboard.herokuapp.com/) of the web app.
+
+The scaled MSE across all models are below 10$ which I consider acceptable considering the simple model and the limited amount of information. The MSE for each model is plotted in the [visualization](https://github.com/jpthewes/dax30_dashboard/tree/master/pictures).
 
 ## Conclusion:
 ### Reflection:
